@@ -23,7 +23,7 @@ kotlin {
     ).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "Shared"
-            isStatic = true
+            //isStatic = true
         }
     }
     
@@ -41,7 +41,7 @@ kotlin {
     }
 
     linkerConfig(
-        "-U _OBJC_CLASS_\$_SwiftExpectDeclaration"
+        "-U _OBJC_CLASS_\$_SwiftExpectDeclarationBinder"
     )
 }
 
