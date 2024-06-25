@@ -1,0 +1,3 @@
+package = dev.srsouza.swift.interop.binder
+language = Objective-C
+headers = SwiftExpectDeclaration.h
