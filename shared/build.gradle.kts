@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.Framework
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.skie)
 }
 
 kotlin {
@@ -34,15 +35,9 @@ kotlin {
 
         targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget>().all {
             val mainCompilation = compilations.getByName("main")
-            mainCompilation.cinterops.create("swift_expect_declaration") {
-                includeDirs("$rootDir/shared_header")
-            }
+            mainCompilation.cinterops.create("swift_expect_declaration")
         }
     }
-
-    linkerConfig(
-        "-U _OBJC_CLASS_\$_SwiftExpectDeclarationBinder"
-    )
 }
 
 android {
@@ -55,20 +50,4 @@ android {
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
     }
-}
-
-private fun KotlinMultiplatformExtension.linkerConfig(linkerOpts: String) {
-    targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class.java)
-        .map { target ->
-            val mainCompilation = target.compilations.getByName("main")
-            val dynamicFrameworks =
-                target.binaries.filterIsInstance<Framework>().filter { framework -> !framework.isStatic }
-
-            Pair(mainCompilation, dynamicFrameworks)
-        }
-        .forEach { pair ->
-            if (!pair.second.isEmpty()) {
-                pair.first.kotlinOptions.freeCompilerArgs += listOf("-linker-options", linkerOpts)
-            }
-        }
 }

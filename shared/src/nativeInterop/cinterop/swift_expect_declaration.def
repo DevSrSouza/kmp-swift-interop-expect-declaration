@@ -1,3 +1,12 @@
 package = dev.srsouza.swift.interop.binder
 language = Objective-C
-headers = SwiftExpectDeclaration.h
+
+---
+
+#import <Foundation/Foundation.h>
+
+@interface SwiftExpectDeclarationBinder : NSObject
+
++ (void)registerDeclaration NS_SWIFT_NAME(registerDeclaration());
+
+@end
